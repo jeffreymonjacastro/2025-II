@@ -4,10 +4,10 @@
       "name": "Linux",
       "includePath": [
         "${workspaceFolder}/**",
-        "/usr/lib/x86_64-linux-gnu/mpich/include"
+        "/opt/ohpc/pub/mpi/mpich-ofi-gnu12-ohpc/3.4.3/include"
       ],
       "defines": [],
-      "compilerPath": "/usr/bin/mpicxx",
+      "compilerPath": "/opt/ohpc/pub/mpi/mpich-ofi-gnu12-ohpc/3.4.3/bin/mpicxx",
       "cStandard": "c17",
       "cppStandard": "gnu++17",
       "intelliSenseMode": "linux-gcc-x64"
