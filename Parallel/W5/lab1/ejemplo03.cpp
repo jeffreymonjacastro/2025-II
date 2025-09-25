@@ -4,6 +4,7 @@ using namespace std;
 
 int main(int argc, char **argv) {
   int rank, size, numero, conteo;
+
   MPI_Status estado;
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -14,13 +15,14 @@ int main(int argc, char **argv) {
 
   if (rank == 0) {
     numero = 4;
-    // envio al resto de procesos
+    // Envio al resto de procesos (Es asincrono)
     for (int i = 1; i < size; i++)
       MPI_Send(&numero, 1, MPI_INT, i, 999, MPI_COMM_WORLD);
 
     cout << "Imprimiendo desde el rank " << rank << " que envia el numero " << numero << endl;
   } else {
-    // Recibo desde el maestro
+    // Recibo desde el maestro (los procesos esperan el envio)
+    // MPI_ANY_SOURCE y MPI_ANY_TAG permiten recibir de cualquier proceso, en este caso del maestro (0)
     MPI_Recv(&numero, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &estado);
     cout << "Imprimiendo desde el rank " << rank << " que recibe el numero " << numero << endl;
   }
