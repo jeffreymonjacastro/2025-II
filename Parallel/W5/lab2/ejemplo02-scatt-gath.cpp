@@ -39,9 +39,12 @@ int main(int argc, char *argv[]) {
   // 5. Imprima el array desde el maestro
   if (rank == 0) {
     cout << "Proceso " << rank << " tiene data ";
+
     for (int i = 0; i < size; i++)
       cout << data_global[i] << ", ";
+
     cout << endl;
   }
+
   MPI_Finalize();
 }
