@@ -1,0 +1,82 @@
+[jfiestas@khipu ejemplo06-prom-scatt-gath]$ mpiexec -np 2 ./a.out
+Promedio resultado: 50.0180 
+Tiempo ini: 24.476377 ms
+Tiempo Scatter: 2.398166 ms
+Tiempo Gather: 0.020191 ms
+Tiempo communicacion: 2.418357 ms
+Tiempo suma: 1.708350 ms
+Tiempo result: 0.000078 ms
+Tiempo total: 28.603162 ms
+[jfiestas@khipu ejemplo06-prom-scatt-gath]$ mpiexec -np 4 ./a.out
+Promedio resultado: 50.0180 
+Tiempo ini: 28.992403 ms
+Tiempo Scatter: 2.868397 ms
+Tiempo Gather: 0.017841 ms
+Tiempo communicacion: 2.886238 ms
+Tiempo suma: 0.855631 ms
+Tiempo result: 0.000080 ms
+Tiempo total: 32.734352 ms
+[jfiestas@khipu ejemplo06-prom-scatt-gath]$ mpiexec -np 6 ./a.out
+Promedio resultado: 50.0181 
+Tiempo ini: 24.954667 ms
+Tiempo Scatter: 3.999999 ms
+Tiempo Gather: 0.017887 ms
+Tiempo communicacion: 4.017886 ms
+Tiempo suma: 0.567131 ms
+Tiempo result: 0.000326 ms
+Tiempo total: 29.540010 ms
+[jfiestas@khipu ejemplo06-prom-scatt-gath]$ mpiexec -np 8 ./a.out
+Promedio resultado: 50.0180 
+Tiempo ini: 25.377165 ms
+Tiempo Scatter: 4.495480 ms
+Tiempo Gather: 0.017479 ms
+Tiempo communicacion: 4.512959 ms
+Tiempo suma: 0.429850 ms
+Tiempo result: 0.000095 ms
+Tiempo total: 30.320069 ms
+[jfiestas@khipu ejemplo06-prom-scatt-gath]$ mpiexec -np 12 ./a.out
+Promedio resultado: 50.0181 
+Tiempo ini: 29.106107 ms
+Tiempo Scatter: 5.569847 ms
+Tiempo Gather: 0.047660 ms
+Tiempo communicacion: 5.617507 ms
+Tiempo suma: 0.286186 ms
+Tiempo result: 0.000121 ms
+Tiempo total: 35.009921 ms
+[jfiestas@khipu ejemplo06-prom-scatt-gath]$ mpiexec -np 16 ./a.out
+Promedio resultado: 50.0180 
+Tiempo ini: 24.999222 ms
+Tiempo Scatter: 6.085447 ms
+Tiempo Gather: 0.060722 ms
+Tiempo communicacion: 6.146169 ms
+Tiempo suma: 0.217638 ms
+Tiempo result: 0.000112 ms
+Tiempo total: 31.363141 ms
+[jfiestas@khipu ejemplo06-prom-scatt-gath]$ mpiexec -np 24 ./a.out
+Promedio resultado: 50.0178 
+Tiempo ini: 24.297328 ms
+Tiempo Scatter: 3.172713 ms
+Tiempo Gather: 0.156422 ms
+Tiempo communicacion: 3.329135 ms
+Tiempo suma: 0.142276 ms
+Tiempo result: 0.000117 ms
+Tiempo total: 27.768856 ms
+[jfiestas@khipu ejemplo06-prom-scatt-gath]$ mpiexec -np 32 ./a.out
+Promedio resultado: 50.0180 
+Tiempo ini: 26.783602 ms
+Tiempo Scatter: 2.844975 ms
+Tiempo Gather: 0.168450 ms
+Tiempo communicacion: 3.013425 ms
+Tiempo suma: 0.106146 ms
+Tiempo result: 0.000144 ms
+Tiempo total: 29.903317 ms
+[jfiestas@khipu ejemplo06-prom-scatt-gath]$ mpiexec -np 40 ./a.out
+Promedio resultado: 50.0178 
+Tiempo ini: 25.969044 ms
+Tiempo Scatter: 3.241561 ms
+Tiempo Gather: 0.141085 ms
+Tiempo communicacion: 3.382646 ms
+Tiempo suma: 0.091135 ms
+Tiempo result: 0.000183 ms
+Tiempo total: 29.443008 ms
+
