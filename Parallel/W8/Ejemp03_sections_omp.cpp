@@ -14,31 +14,31 @@ int main() {
     b[i] = i + 2;
   }
 
-#pragma omp parallel num_threads(2) shared(a, b, c, d) private(i, id)
+  #pragma omp parallel num_threads(2) shared(a, b, c, d) private(i, id)
   {
-// 1. genere una seccion para sumar los arrays
-//    y otra para multiplicar sus elementos
-// se puede usar nowait?
-#pragma omp sections nowait
+    // 1. genere una seccion para sumar los arrays
+    //    y otra para multiplicar sus elementos
+    // se puede usar nowait?
+    #pragma omp sections nowait
     {
-#pragma omp section
+      #pragma omp section
       {
         for (i = 0; i < N; i++) {
           c[i] = a[i] + b[i];
-#ifdef _OPENMP
-          id = omp_get_thread_num();
-#endif
+          #ifdef _OPENMP
+            id = omp_get_thread_num();
+          #endif
           printf("seccion 1. Hilo: %i it: %i \n ", id, i);
         }
       } // section 1
-#pragma omp section
+
+      #pragma omp section
       {
         for (i = 0; i < N; i++) {
           d[i] = a[i] * b[i];
-
-#ifdef _OPENMP
-          id = omp_get_thread_num();
-#endif
+          #ifdef _OPENMP
+            id = omp_get_thread_num();
+          #endif
           printf("seccion 2. Hilo: %i it: %i \n ", id, i);
         } // section 2
       }
