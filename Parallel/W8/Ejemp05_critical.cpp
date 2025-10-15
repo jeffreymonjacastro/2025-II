@@ -31,7 +31,7 @@ int main() {
       }
     } // for
 		#pragma omp critical
-    cnt_t += cnt;
+      cnt_t += cnt;
   } // parallel
 
   #ifdef _OPENMP
