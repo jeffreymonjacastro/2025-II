@@ -34,12 +34,15 @@ int main (int argc, char **argv) {
             global_in[i] = static_cast<double>(i % 101);
         }
     }
+
+    start_time = MPI_Wtime();
     
     MPI_Scatter(global_in.data(), local_N, MPI_DOUBLE, &local_in[1], local_N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     double t_update = 0.0;
     
-    auto t0 = chrono::high_resolution_clock::now();
+    // auto t0 = chrono::high_resolution_clock::now();
+
 
     MPI_Request reqs[4];
     MPI_Status stats[4];
@@ -78,12 +81,16 @@ int main (int argc, char **argv) {
         local_out[local_N - 1] = (local_in[local_N - 1] + local_in[local_N] + local_in[local_N + 1]) / 3.0;
     }
 
-    MPI_Gather(local_out.data(), local_N, MPI_DOUBLE, global_out.data(), local_N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Gather(&local_out[1], local_N, MPI_DOUBLE, global_out.data(), local_N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
     
-    auto t1 = chrono::high_resolution_clock::now();
-    t_update = chrono::duration<double>(t1 - t0).count();
+    end_time = MPI_Wtime();
+    // auto t1 = chrono::high_resolution_clock::now();
+    // t_update = chrono::duration<double>(t1 - t0).count();
     
     if (rank == 0) {
+        double total_time = end_time - start_time;
+        printf("Tiempo: %f\n", total_time);
+
         cout << "N=" << N << " t_update (ms): " << t_update * 1000 << "\n";
     }
 
