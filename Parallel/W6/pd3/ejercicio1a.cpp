@@ -5,7 +5,8 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  int rank, size, n = 5;
+  int rank, size, n = 50;
+  double start_local_time, end_local_time, start_time, end_time;
   string msg;
 
   MPI_Init(&argc, &argv);
@@ -15,6 +16,8 @@ int main(int argc, char *argv[]) {
 
   auto ping_pong = [&]() {
     for (int i = 0; i < n; i++) {
+      start_local_time = MPI_Wtime();
+
       if (rank == 0) {
         msg = "ping " + to_string(i);
         MPI_Send(&msg[0], 7 , MPI_CHAR, 1, 0, MPI_COMM_WORLD);
@@ -28,6 +31,9 @@ int main(int argc, char *argv[]) {
         msg = "pong " + to_string(i);
         MPI_Send(&msg[0], 7, MPI_CHAR, 0, 1, MPI_COMM_WORLD);
       }
+
+      end_local_time = MPI_Wtime();
+      printf("Process %d round-trip time: %f seconds\n", rank, end_local_time - start_local_time);
     }
   };
 
@@ -38,7 +44,13 @@ int main(int argc, char *argv[]) {
       MPI_Abort(MPI_COMM_WORLD, -1);
     }
   } else {
+    start_time = MPI_Wtime();
     ping_pong();
+    end_time = MPI_Wtime();
+
+    if (rank == 0) {
+      printf("Total time: %f seconds\n", end_time - start_time);
+    }
   }
 
 
