@@ -8,7 +8,7 @@ int work(int i) {
 }
 
 int main() {
-  int n = 1 << 20, mx = 0, pmax, r;
+  int n = 1 << 10, mx = 0, pmax, r;
 
 	#ifdef _OPENMP
 		double t1 = omp_get_wtime();
