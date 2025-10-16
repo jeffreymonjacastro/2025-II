@@ -15,7 +15,7 @@ int iRand(int iMin, int iMax) {
 return  rand() % iMax + iMin;
 }
 
-int dequeue(float *a, int& n){
+int dequeue(float *a, int &n){
 //printf("deque por hilo %i \n",omp_get_thread_num());
 return a[iRand(0,n-1)];
 }
@@ -33,11 +33,11 @@ void critical_example(float *x, float *y, int n)
   #pragma omp parallel num_threads(4) shared(x, y) private(ix_next, iy_next)
   {
     #pragma omp critical (xaxis)
-      	ix_next = dequeue(x,n);
+      ix_next = dequeue(x,n);
       work(ix_next, x);
 
     #pragma omp critical (yaxis)
-      	iy_next = dequeue(y,n);
+      iy_next = dequeue(y,n);
       work(iy_next, y);
 }
 }
