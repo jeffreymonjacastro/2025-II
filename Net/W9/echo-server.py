@@ -1,9 +1,9 @@
 import socket
 
-HOST = "127.0.0.1"  
-PORT = 10514      
+HOST = "192.168.229.206"  
+PORT = 5000      
 
-FILENAME = "rfc_recibido.txt"
+FILENAME = "received.txt"
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
