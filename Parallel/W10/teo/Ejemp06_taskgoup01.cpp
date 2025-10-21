@@ -10,6 +10,8 @@ int main() {
         printf("Inicio (hilo %d)\n", omp_get_thread_num());
 
         // --- Grupo de tareas con sincronización conjunta ---
+        //* Todas las tareas de este grupo deben completarse antes de continuar con otras task
+        //* Tienen una barrera implícita al final del taskgroup
         #pragma omp taskgroup
         {
             #pragma omp task
