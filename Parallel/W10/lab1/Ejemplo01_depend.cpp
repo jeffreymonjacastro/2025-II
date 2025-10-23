@@ -1,5 +1,6 @@
 #include <omp.h>
 #include <iostream>
+
 int main() {
     int tokA, tokB, tokC; 
 

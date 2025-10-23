@@ -5,6 +5,10 @@
 #include <ctime>
 #include <algorithm>
 
+#ifdef _OPENMP
+    #include <omp.h>
+#endif
+
 using namespace std;
 
 struct Result {
@@ -19,13 +23,19 @@ Result run_mc_seq(uint64_t N) {
 
     uint64_t tri_cnt = 0;
     uint64_t obt_cnt = 0;
+    double secs = 0.0;
 
-    auto t0 = chrono::high_resolution_clock::now();
+    #ifdef _OPENMP
+        double t0 = omp_get_wtime();
+    #endif
 
+    #pragma omp parallel for reduction(+:tri_cnt, obt_cnt)
     for (uint64_t i = 0; i < N; ++i) {
-        // Uniformes en (0,1)
-        double u = static_cast<double>(rand()) / RAND_MAX;
-        double v = static_cast<double>(rand()) / RAND_MAX;
+        // Usando rand_r para thread-safety
+        unsigned int seed = static_cast<unsigned int>(time(nullptr)) + static_cast<unsigned int>(i * 1103515245);
+
+        double u = static_cast<double>(rand_r(&seed)) / RAND_MAX;
+        double v = static_cast<double>(rand_r(&seed)) / RAND_MAX;
 
         double x = std::min(u, v);
         double y = std::max(u, v);
@@ -50,9 +60,10 @@ Result run_mc_seq(uint64_t N) {
             }
         }
     }
-
-    auto t1 = chrono::high_resolution_clock::now();
-    double secs = chrono::duration<double>(t1 - t0).count();
+    #ifdef _OPENMP
+        double t1 = omp_get_wtime();
+        secs = t1 - t0;
+    #endif
 
     double p_tri = static_cast<double>(tri_cnt) / static_cast<double>(N);
     double p_obt = static_cast<double>(obt_cnt) / static_cast<double>(N);
@@ -67,10 +78,18 @@ int main(int argc, char** argv) {
     //   ./a.out [N]
     // N por defecto = 1e8, seed por defecto = time(nullptr)
     uint64_t N = (argc > 1) ? strtoull(argv[1], nullptr, 10) : 100000000ULL;
-//    unsigned int seed = (argc > 2) ? static_cast<unsigned int>(strtoul(argv[2], nullptr, 10))
-  //                                 : static_cast<unsigned int>(time(nullptr));
     unsigned int seed = time(nullptr);
     srand(seed); // inicializa RNG C
+
+    int num_threads = 1;
+    #ifdef _OPENMP
+        #pragma omp parallel
+        {
+            #pragma omp single
+            num_threads = omp_get_num_threads();
+        }
+    #endif
+    cout << "Usando OpenMP con reduction y " << num_threads << " threads\n";
 
     const int NUM_RUNS = 5;
     double sum_p_tri = 0.0;
@@ -103,7 +122,7 @@ int main(int argc, char** argv) {
     double avg_gflops = sum_gflops / NUM_RUNS;
 
     cout << "========================================\n";
-    cout << "PROMEDIOS DE " << NUM_RUNS << " EJECUCIONES EN SECUENCIAL:\n";
+    cout << "PROMEDIOS DE " << NUM_RUNS << " EJECUCIONES EN PARALELO OPTIMO:\n";
     cout << "========================================\n";
     cout << "Trials              : " << N << "\n";
     cout << "Seed (srand)        : " << seed << "\n";
