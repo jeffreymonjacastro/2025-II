@@ -16,7 +16,7 @@ class rdt_sender:
         return checksum
     
     def is_corrupted(self):
-        return randint(0, 9) < 8
+        return randint(0, 9) < 4
     
     def send_packet(self, packet_id):
         message = f"Packet {packet_id}"
@@ -25,7 +25,7 @@ class rdt_sender:
         checksum = self.checksum_calculator(message_bytes)
         
         if self.is_corrupted():
-            message_bytes = "Corrupted 1".encode('utf-8')
+            message_bytes = (f"Corrupted {packet_id}").encode('utf-8')
         
         udp_header = struct.pack('!IIII', self.port, self.port, data_length, checksum)
         final_message = udp_header + message_bytes
