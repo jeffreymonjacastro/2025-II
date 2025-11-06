@@ -8,9 +8,19 @@ n_procesos = [1, 2, 4, 8, 16, 32, 64]
 # REEMPLAZA ESTOS VALORES CON TUS TIEMPOS REALES
 tiempos = [0.233452, 0.199062, 0.108731, 0.05409252, 0.0339078, 0.0205543, 0.017595]
 
+# Calcular la función teórica: n*log(n)/p
+n = 1000000
+tiempos_teoricos = [(n * np.log(n)) / p for p in n_procesos]
+
+# Normalizar para que coincida mejor con los datos reales (ajustar factor de escala)
+factor_escala = tiempos[0] / tiempos_teoricos[0]
+tiempos_teoricos_normalizados = [t * factor_escala for t in tiempos_teoricos]
+
 # Crear la gráfica
 plt.figure(figsize=(10, 6))
-plt.plot(n_procesos, tiempos, marker='o', linewidth=2, markersize=8, label='Tiempo de ejecución')
+plt.plot(n_procesos, tiempos, marker='o', linewidth=2, markersize=8, label='Tiempo de ejecución (real)', color='blue')
+plt.plot(n_procesos, tiempos_teoricos_normalizados, marker='s', linewidth=2, markersize=6, 
+         linestyle='--', label=f'Tiempo teórico: n*log(n)/p (n={n})', color='red', alpha=0.7)
 
 # Configurar escala logarítmica en el eje y
 plt.yscale('log')
