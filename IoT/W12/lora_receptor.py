@@ -1,7 +1,7 @@
 import serial
 import time
 
-PORT = 'COM15'  
+PORT = 'COM6'  
 BAUD_RATE = 115200
 OUTPUT_FILE = 'log1.txt'
 
