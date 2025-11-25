@@ -77,7 +77,7 @@ def get_route(hostname):
                     
                     ready = select.select([my_socket], [], [], TIMEOUT)
                     
-					# Timeout 
+                    # Timeout 
                     if ready[0] == []: 
                         print(f"{ttl} * * * Request timed out.")
                         continue
@@ -85,34 +85,49 @@ def get_route(hostname):
                     time_received = time.time()
                     rec_packet, addr = my_socket.recvfrom(1024)
 
+                    # Debug: Check packet length
+                    if len(rec_packet) < 28:
+                        print(f"{ttl} {addr[0]} (Packet too short: {len(rec_packet)} bytes)")
+                        break
+
                     icmp_header = rec_packet[20:28]
+
                     types, code, checksum_recv, id_recv, sequence_recv = struct.unpack(
                         "bbHHh", icmp_header
                     )
 
                     # ICMP Type 11: Time Exceeded (from an intermediate router)
                     if types == 11:
-                        time_sent = struct.unpack("d", rec_packet[56:64])[0]
-                        rtt = (time_received - time_sent) * 1000
-                        print(f"{ttl} {addr[0]} rtt={rtt:.2f} ms (Time Exceeded)")
+                        if len(rec_packet) >= 64:
+                            time_sent = struct.unpack("d", rec_packet[56:64])[0]
+                            rtt = (time_received - time_sent) * 1000
+                            print(f"{ttl} {addr[0]} rtt={rtt:.2f} ms (Time Exceeded)")
+                        else:
+                            print(f"{ttl} {addr[0]} (Time Exceeded - incomplete packet) {len(rec_packet)} bytes")
                         break 
                         
                     # ICMP Type 3: Destination Unreachable
                     elif types == 3: 
-                        time_sent = struct.unpack("d", rec_packet[56:64])[0]
-                        rtt = (time_received - time_sent) * 1000
-                        print(f"{ttl} {addr[0]} rtt={rtt:.2f} ms (Destination unreachable)")
+                        if len(rec_packet) >= 64:
+                            time_sent = struct.unpack("d", rec_packet[56:64])[0]
+                            rtt = (time_received - time_sent) * 1000
+                            print(f"{ttl} {addr[0]} rtt={rtt:.2f} ms (Destination unreachable)")
+                        else:
+                            print(f"{ttl} {addr[0]} (Destination unreachable - incomplete packet)")
                         break 
                         
                     # ICMP Type 0: Echo Reply (from the final destination)
                     elif types == 0: 
-                        time_sent = struct.unpack("d", rec_packet[28:])[0]
-                        rtt = (time_received - time_sent) * 1000
-                        print(f"{ttl} {addr[0]} rtt={rtt:.2f} ms (Reached destination)")
+                        if len(rec_packet) >= 36:  # 28 + 8 bytes for timestamp
+                            time_sent = struct.unpack("d", rec_packet[28:36])[0]
+                            rtt = (time_received - time_sent) * 1000
+                            print(f"{ttl} {addr[0]} rtt={rtt:.2f} ms (Reached destination)")
+                        else:
+                            print(f"{ttl} {addr[0]} (Reached destination - incomplete packet)")
                         return 
 
                     else:
-                        print(f"{ttl} Unexpected ICMP type {types}")
+                        print(f"{ttl} {addr[0]} Unexpected ICMP type {types}, packet length: {len(rec_packet)} bytes")
                         break 
                         
                 except timeout:
@@ -124,7 +139,5 @@ def get_route(hostname):
 
 if __name__ == '__main__':
     get_route("www.google.com")
-    # get_route("www.bing.com")
-    # get_route("www.amazon.com")
-    # get_route("192.168.1.1")
-    # get_route("10.255.255.255")
+    get_route("www.elcomercio.pe")
+    get_route("www.mppt-dashboard-iot.vercel.app")
